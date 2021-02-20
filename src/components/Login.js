@@ -1,35 +1,91 @@
-import React, { useEffect } from "react";
-import axios from "axios";
+import React, { useEffect, useRef, useState } from 'react';
+import axios from 'axios';
+import { useHistory } from 'react-router';
 
 const Login = () => {
+  const [credentials, setCredentials] = useState({
+    username: 'Lambda School',
+    password: 'i<3Lambd4',
+  });
+  const [error, setError] = useState('');
+  const [proccessing, setProcessing] = useState(false);
+  const history = useHistory();
   // make a post request to retrieve a token from the api
   // when you have handled the token, navigate to the BubblePage route
 
-  useEffect(()=>{
+  const handleInputOnChange = (e) => {
+    setError('');
+    setCredentials({ ...credentials, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await setProcessing(true);
+    console.log(credentials);
+    axios
+      .post('http://localhost:5000/api/login', credentials)
+      .then(async (res) => {
+        window.localStorage.setItem('token', res.data.payload);
+        history.push('/bubbles');
+      })
+      .catch(async (e) => {
+        (await e.message.includes(403)) &&
+          setError('Username or Password not valid');
+      });
+    await setProcessing(false);
+  };
+
+  useEffect(() => {
     axios
       .delete(`http://localhost:5000/api/colors/1`, {
-        headers:{
-          'authorization': "ahuBHejkJJiMDhmODZhZi0zaeLTQ4ZfeaseOGZgesai1jZWYgrTA07i73Gebhu98"
-        }
+        headers: {
+          authorization:
+            'ahuBHejkJJiMDhmODZhZi0zaeLTQ4ZfeaseOGZgesai1jZWYgrTA07i73Gebhu98',
+        },
       })
-      .then(res=>{
-        axios.get(`http://localhost:5000/api/colors`, {
-          headers:{
-            'authorization': ""
-          }
-        })
-        .then(res=> {
-          console.log(res);
-        });
+      .then((res) => {
+        axios
+          .get(`http://localhost:5000/api/colors`, {
+            headers: {
+              authorization: '',
+            },
+          })
+          .then((res) => {
+            console.log(res);
+          });
         console.log(res);
-      })
-  });
+      });
+  }, []);
 
   return (
     <>
       <h1>
         Welcome to the Bubble App!
-        <p>Build a login page here</p>
+        <form className="login-form" onSubmit={handleSubmit}>
+          {error && <p className="error">{error}</p>}
+          <label htmlFor="loginUser">
+            Username
+            <input
+              id="loginUser"
+              name="username"
+              placeholder="Username"
+              onChange={handleInputOnChange}
+            />
+          </label>
+          <label htmlFor="loginPassword">
+            Password
+            <input
+              id="loginPassword"
+              name="password"
+              type="password"
+              placeholder="Password"
+              onChange={handleInputOnChange}
+            />
+          </label>
+          <button type="submit" disabled={proccessing}>
+            {proccessing ? 'Loggin In' : 'Login'}
+          </button>
+        </form>
       </h1>
     </>
   );
