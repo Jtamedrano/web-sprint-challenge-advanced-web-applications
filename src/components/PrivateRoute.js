@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Redirect, Route } from 'react-router';
-import axiosWithAuth from '../utils/axiosWithAuth';
+import axiosWithAuth from '../helpers/axiosWithAuth';
 
 const PrivateRoute = ({ path, component }) => {
   const [authenticated, setAuthenticated] = useState(false);

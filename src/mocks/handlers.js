@@ -171,7 +171,7 @@ export const handlers = [
     }
   }),
 
-  rest.delete(`${urlBase}/colors/:id`, (req, res, ctx) => {
+  rest.delete(`${urlBase}/colors/:id`, async (req, res, ctx) => {
     if (authenticator(req)) {
       if (!req.params.id)
         return res(
@@ -180,7 +180,7 @@ export const handlers = [
         );
 
       colors = colors.filter((color) => `${color.id}` !== req.params.id);
-      return res(ctx.status(202), ctx.json(req.params.id));
+      return res(ctx.status(202), ctx.json(colors));
     } else {
       return res(
         ctx.status(403),
