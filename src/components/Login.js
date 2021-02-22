@@ -4,8 +4,8 @@ import { useHistory } from 'react-router';
 
 const Login = () => {
   const [credentials, setCredentials] = useState({
-    username: 'Lambda School',
-    password: 'i<3Lambd4',
+    username: '',
+    password: '',
   });
   const [error, setError] = useState('');
   const [proccessing, setProcessing] = useState(false);

@@ -1,12 +1,17 @@
-import React from "react";
-import { render, screen } from "@testing-library/react";
-import BubblePage from "./BubblePage";
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import BubblePage from './BubblePage';
 
-test("Renders BubblePage without errors", () => {
+test('Renders BubblePage without errors', () => {
   // Finish this test
+  render(<BubblePage />);
+
+  const { findByText } = screen;
+  const colorLabel = findByText('colors');
+  expect(colorLabel).toBeInTheDocument();
 });
 
-test("Fetches data and renders the bubbles on mounting", () => {
+test('Fetches data and renders the bubbles on mounting', () => {
   // Finish this test
 });
 
